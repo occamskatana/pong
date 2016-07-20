@@ -5,9 +5,18 @@ function Table(positionx, positiony){
 } 
 
 
-function Paddle(positionx, positiony){
+function Paddle(positionx, positiony){ 
+	var Y = positiony
 	this.positionx = positionx;
-	this.positiony = positiony;
+	this.positiony = Y
+	this.speed = 10;
+	this.moveDown =  function() {
+		 Y -= 10;
+		 console.log(Y)
+	}
+	this.moveUp = function() {
+		return positiony += 10;
+	}
 }
 
 function Ball(positionx, positiony){
@@ -29,6 +38,7 @@ Paddle.prototype.render = function (positionx, positiony, context) {
 	context.fillRect(positionx, positiony, 15, 85);
 }
 
+
 Ball.prototype.render = function(positionx, positiony, context, canvasWidth, canvasHeight){
 	context.beginPath();
 	context.arc(positionx, positiony, 8, 0, 2 * Math.PI, false)
@@ -41,20 +51,22 @@ var render = function(context, canvasWidth, canvasHeight){
 	cpuPaddle.render(2, 100, context);
 	playerPaddle.render(canvasWidth - 17, 220, context)
 	ball.render(canvasWidth / 2, canvasHeight /  2, context);
+	cpuPaddle.moveDown();
+	console.log(cpuPaddle.Y)
 }
 
  window.onload = function(){
 
-	var canvas = document.getElementById('canvas');
-	var context = canvas.getContext('2d');
-	var canvasHeight = context.canvas.clientHeight;
-	var canvasWidth = context.canvas.clientWidth;
+  canvas = document.getElementById('canvas');
+	context = canvas.getContext('2d');
+	canvasHeight = context.canvas.clientHeight;
+	canvasWidth = context.canvas.clientWidth;
   table = new Table();
   cpuPaddle = new Paddle(2, 100);
   playerPaddle = new Paddle(canvasWidth - 17, 100, context)
   ball = new Ball(canvasWidth / 2, canvasHeight / 2, context);
 	
-  render(context, canvasWidth, canvasHeight);
+  step();
 }
 
 
@@ -70,12 +82,8 @@ var animate = window.requestAnimationFrame ||
 
 
 var step = function(){
-	var ball;
-	var table;
-	var playerPaddle;
-	var cpuPaddle;
-	setElements()
-
+	render(context, canvasWidth, canvasHeight)
+	animate();
 }
 
 
