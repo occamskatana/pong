@@ -20,6 +20,7 @@ function Paddle(positionx, positiony){
 	this.speed = 15;
 	this.height = 85;
 	this.width = 15;
+	this.paddleend = this.positiony + 85
 	console.log(this)
 }
 
@@ -45,12 +46,13 @@ function Ball(positionx, positiony){
 	this.positiony = positiony;
 	this.speedx = 0;
 	this.speedy = 0;
+	this.radius = 8;
 }
 
 
 Ball.prototype.render = function(context){
 	context.beginPath();
-	context.arc(this.positionx, this.positiony, 8, 0, 2 * Math.PI, false)
+	context.arc(this.positionx, this.positiony, this.radius, 0, 2 * Math.PI, false)
 	context.fiillStyle="white";
 	context.fill();
 	this.move();
@@ -59,12 +61,49 @@ Ball.prototype.render = function(context){
 Ball.prototype.move = function(){
 	this.positionx = this.positionx - this.speedx;
 	this.positiony = this.positiony - this.speedy;
+
+	if (this.positiony + 8 >= canvasHeight || this.positiony <= 8){
+		this.speedy = this.speedy * -1 
+		console.log(this.speedy)
+	};
+
+
 }
 
 Ball.prototype.serve = function(){
-	this.speedx = Math.random() * (6) - 1
+	this.speedx = -5
 	this.speedy = Math.random() * (1 + 5) - 1 
 }
+
+Ball.prototype.reset = function(){
+	this.speedx = 0;
+	this.speedy = 0;
+	this.positionx = canvasWidth / 2;
+	this.positiony = canvasHeight / 2;
+}
+
+
+var collisionDetection = function(){
+	if (ball.positionx >= (canvasWidth - 17) && playerPaddle.positiony < ball.positiony && ball.positiony < playerPaddle.paddleend){
+		ball.speedx = -ball.speedx;
+		ball.speedy = -ball.speedy;
+		console.log(playerPaddle.positiony, ball.positiony, playerPaddle.paddleend)
+	} else if(ball.positionx >= canvasWidth){
+		cpuScore++
+		ball.reset();
+	};
+
+	if (ball.positionx <= 17 && cpuPaddle.positiony < ball.positiony && ball.positiony < cpuPaddle.paddleend){
+		ball.speedx = -ball.speedx;
+		ball.speedy = -ball.speedy;
+		console.log(cpuPaddle.positiony, ball.positiony, cpuPaddle.paddleend)
+	} else if(ball.positionx <= 17){
+		playerScore++
+		ball.reset();
+	}
+}
+
+
 
 
 
@@ -78,6 +117,7 @@ var render = function(context){
 
 
 var step = function(){
+	collisionDetection()
 	context.clearRect(0, 0, canvasWidth, canvasHeight)
 	render(context)
 	animate(step)
@@ -94,22 +134,29 @@ var step = function(){
   cpuPaddle = new Paddle(2, 100);
   playerPaddle = new Paddle(canvasWidth - 17, 100, context);
   ball = new Ball(canvasWidth / 2, canvasHeight / 2, context);
+  cpuScore = 0;
+  playerScore = 0;
   step()
 }
+
 
 window.addEventListener('keydown', function(e){
 	if(e.keyCode == 38){
 		playerPaddle.moveUp();
+		cpuPaddle.moveUp();
 	} else if(e.keyCode == 40){
 		playerPaddle.moveDown();
+		cpuPaddle.moveDown()
 	}
-})
+});
 
 window.addEventListener('keydown', function(e){
 	if(e.keyCode == 13){
 		ball.serve()
 	}
-})
+});
+
+
 
 
 var animate = window.requestAnimationFrame ||
