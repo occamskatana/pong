@@ -29,11 +29,15 @@ Paddle.prototype.render = function (context) {
 }
 
 Paddle.prototype.moveUp = function(){
-	this.positiony -= this.speed
+	if(this.positiony >= 0){
+		this.positiony -= this.speed
+	}
 }
 
 Paddle.prototype.moveDown = function(){
-	this.positiony = this.positiony + this.speed 
+	if(this.positiony + 85 <= canvasHeight){
+		this.positiony = this.positiony + this.speed 
+	}
 }
 
 function Ball(positionx, positiony){
@@ -79,8 +83,12 @@ var step = function(){
   step()
 }
 
-window.addEventListener('click', function(){
-	playerPaddle.moveDown()
+window.addEventListener('keydown', function(e){
+	if(e.keyCode == 38){
+		playerPaddle.moveUp();
+	} else if(e.keyCode == 40){
+		playerPaddle.moveDown();
+	}
 })
 
 
