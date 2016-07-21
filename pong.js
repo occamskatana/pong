@@ -43,6 +43,8 @@ Paddle.prototype.moveDown = function(){
 function Ball(positionx, positiony){
 	this.positionx = positionx;
 	this.positiony = positiony;
+	this.speedx = 0;
+	this.speedy = 0;
 }
 
 
@@ -51,10 +53,22 @@ Ball.prototype.render = function(context){
 	context.arc(this.positionx, this.positiony, 8, 0, 2 * Math.PI, false)
 	context.fiillStyle="white";
 	context.fill();
+	this.move();
+}
+
+Ball.prototype.move = function(){
+	this.positionx = this.positionx - this.speedx;
+	this.positiony = this.positiony - this.speedy;
+}
+
+Ball.prototype.serve = function(){
+	this.speedx = Math.random() * (6) - 1
+	this.speedy = Math.random() * (1 + 5) - 1 
 }
 
 
 
+//function for rendering every object constructed through methods above within the context of the canvas
 var render = function(context){
 	cpuPaddle.render(context);
 	playerPaddle.render(context)
@@ -69,7 +83,7 @@ var step = function(){
 	animate(step)
 }
 
-
+//objects instantiated according to the height and width of the page
  window.onload = function(){
   canvas = document.getElementById('canvas');
 	context = canvas.getContext('2d');
@@ -88,6 +102,12 @@ window.addEventListener('keydown', function(e){
 		playerPaddle.moveUp();
 	} else if(e.keyCode == 40){
 		playerPaddle.moveDown();
+	}
+})
+
+window.addEventListener('keydown', function(e){
+	if(e.keyCode == 13){
+		ball.serve()
 	}
 })
 
