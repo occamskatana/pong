@@ -88,7 +88,8 @@ var collisionDetection = function(){
 		ball.speedx = -ball.speedx;
 		ball.speedy = -ball.speedy;
 		console.log(playerPaddle.positiony, ball.positiony, playerPaddle.paddleend)
-	} else if(ball.positionx >= canvasWidth){
+	} else if(ball.positionx >= canvasWidth - 17){
+		if(playerPaddle.paddleend < ball.positiony || playerPaddle.positiony > ball.positiony)
 		cpuScore++
 		ball.reset();
 	};
@@ -98,8 +99,11 @@ var collisionDetection = function(){
 		ball.speedy = -ball.speedy;
 		console.log(cpuPaddle.positiony, ball.positiony, cpuPaddle.paddleend)
 	} else if(ball.positionx <= 17){
-		playerScore++
-		ball.reset();
+
+		if (cpuPaddle.paddleend < ball.positiony || cpuPaddle.positiony > ball.positiony){
+			playerScore++
+			ball.reset();
+		}
 	}
 }
 
