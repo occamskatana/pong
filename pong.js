@@ -53,7 +53,7 @@ function Ball(positionx, positiony){
 Ball.prototype.render = function(context){
 	context.beginPath();
 	context.arc(this.positionx, this.positiony, this.radius, 0, 2 * Math.PI, false)
-	context.fiillStyle="white";
+	context.fiillStyle = "white";
 	context.fill();
 	this.move();
 }
@@ -90,8 +90,8 @@ var collisionDetection = function(){
 		console.log(playerPaddle.positiony, ball.positiony, playerPaddle.paddleend)
 	} else if(ball.positionx >= canvasWidth - 17){
 		if(playerPaddle.paddleend < ball.positiony || playerPaddle.positiony > ball.positiony)
-		cpuScore++
-		ball.reset();
+			cpuScore++
+			ball.reset();
 	};
 
 	if (ball.positionx <= 17 && cpuPaddle.positiony < ball.positiony && ball.positiony < cpuPaddle.paddleend){
@@ -107,12 +107,23 @@ var collisionDetection = function(){
 	}
 }
 
+var computeAi = function(){
+	var midpoint = cpuPaddle.positiony + (cpuPaddle.height / 2)
+	if (ball.positiony <= midpoint){
+		cpuPaddle.positiony = cpuPaddle.positiony -1
+	} else if(ball.positiony >= midpoint) {
+		cpuPaddle.positiony = cpuPaddle.positiony +1
+	}
+	console.log(midpoint, ball.positiony)
+}
+
 
 
 
 
 //function for rendering every object constructed through methods above within the context of the canvas
 var render = function(context){
+	computeAi()
 	cpuPaddle.render(context);
 	playerPaddle.render(context)
 	ball.render(context);
@@ -147,10 +158,8 @@ var step = function(){
 window.addEventListener('keydown', function(e){
 	if(e.keyCode == 38){
 		playerPaddle.moveUp();
-		cpuPaddle.moveUp();
 	} else if(e.keyCode == 40){
 		playerPaddle.moveDown();
-		cpuPaddle.moveDown()
 	}
 });
 
