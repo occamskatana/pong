@@ -3,9 +3,23 @@ body {
 }
 
 html {
-	height: 80%%;
+	height: 80%;
 }
 
 canvas {
 	background-color: black;
+}
+
+#score-container {
+	width: 700px;
+	background-color: black;
+	margin-left: 0;
+	height: 150px;
+	color: white;
+}
+
+#cpu-score, #player-score {
+	font-size: 55px;
+	margin-top: -15px;
+	font-weight: 500;
 }

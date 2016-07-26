@@ -87,21 +87,24 @@ var collisionDetection = function(){
 	if (ball.positionx >= (canvasWidth - 17) && playerPaddle.positiony < ball.positiony && ball.positiony < playerPaddle.paddleend){
 		ball.speedx = -ball.speedx;
 		ball.speedy = -ball.speedy;
-		console.log(playerPaddle.positiony, ball.positiony, playerPaddle.paddleend)
+		
 	} else if(ball.positionx >= canvasWidth - 17){
-		if(playerPaddle.paddleend < ball.positiony || playerPaddle.positiony > ball.positiony)
+		if(playerPaddle.paddleend < ball.positiony || playerPaddle.positiony > ball.positiony){
 			cpuScore++
+			setScores();
 			ball.reset();
+		}
 	};
 
 	if (ball.positionx <= 17 && cpuPaddle.positiony < ball.positiony && ball.positiony < cpuPaddle.paddleend){
 		ball.speedx = -ball.speedx;
 		ball.speedy = -ball.speedy;
-		console.log(cpuPaddle.positiony, ball.positiony, cpuPaddle.paddleend)
+		
 	} else if(ball.positionx <= 17){
 
 		if (cpuPaddle.paddleend < ball.positiony || cpuPaddle.positiony > ball.positiony){
 			playerScore++
+			setScores();
 			ball.reset();
 		}
 	}
@@ -114,7 +117,6 @@ var computeAi = function(){
 	} else if(ball.positiony >= midpoint) {
 		cpuPaddle.positiony = cpuPaddle.positiony +1
 	}
-	console.log(midpoint, ball.positiony)
 }
 
 
@@ -138,6 +140,13 @@ var step = function(){
 	animate(step)
 }
 
+var setScores = function(){
+	cpuScoreDisplay.innerHTML = "";
+	cpuScoreDisplay.innerHTML = cpuScore;
+	playerScoreDisplay.innerHTML = "";
+	playerScoreDisplay.innerHTML = playerScore;
+}
+
 //objects instantiated according to the height and width of the page
  window.onload = function(){
   canvas = document.getElementById('canvas');
@@ -151,6 +160,9 @@ var step = function(){
   ball = new Ball(canvasWidth / 2, canvasHeight / 2, context);
   cpuScore = 0;
   playerScore = 0;
+  cpuScoreDisplay = document.getElementById('cpu-score');
+  playerScoreDisplay = document.getElementById('player-score')
+  setScores();
   step()
 }
 

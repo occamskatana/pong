@@ -1,16 +1,26 @@
 <!DOCTYPE html>
 <html>
-<head>
-<title>Motherfucking Pong!!!t</title>
-<script src="pong.js"></script>
-<link rel="stylesheet" href="index.css">
-</head>
+	<head>
+		<title>Motherfucking Pong!!!t</title>
+		<script src="pong.js"></script>
+		<link href="bootstrap.css" rel="stylesheet">
+		<link rel="stylesheet" href="index.css">
+	</head>
 
-<body id="body">
+	<body id="body">
 
-<canvas id="canvas" width="500" height="300"> </canvas>
+	<canvas id="canvas" width="700" height="350"> </canvas>
 
 
-</body>
+		<div class="row" id="score-container">
+			<div class="col-xs-6">
+				<h3 align="center">CPU SCORE</h3><br>
+				<h2 id="cpu-score" align="center"></h2>
+			</div>
+			<div class="col-xs-6">
+				<h3 align="center">PLAYER SCORE</h3><br>
+				<h2 id="player-score" align="center"></h2>
+			</div>
+		</div>
 
 </html>
