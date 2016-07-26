@@ -120,9 +120,6 @@ var computeAi = function(){
 }
 
 
-
-
-
 //function for rendering every object constructed through methods above within the context of the canvas
 var render = function(context){
 	computeAi()
@@ -160,6 +157,13 @@ var setScores = function(){
 	}
 }
 
+var dmx = function(){
+	var sound = new buzz.sound('dmx', {
+		formats: ["mp3"]
+	})
+	sound.play();
+}
+
 //objects instantiated according to the height and width of the page
  window.onload = function(){
   canvas = document.getElementById('canvas');
@@ -180,8 +184,9 @@ var setScores = function(){
   youWon = document.getElementById('you-won');
   youLost.style.display = "none";
   youWon.style.display = "none";
+  dmx();
   setScores();
-  step()
+  step();
 }
 
 
