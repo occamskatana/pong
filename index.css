@@ -23,3 +23,7 @@ canvas {
 	margin-top: -15px;
 	font-weight: 500;
 }
+
+#you-lost, #you-won {
+	font-size: 150px;
+}

@@ -140,11 +140,24 @@ var step = function(){
 	animate(step)
 }
 
+var endGame = function(winner){
+	canvas.style.display = "none";
+	scoreContainer.style.display= "none";
+}
+
 var setScores = function(){
 	cpuScoreDisplay.innerHTML = "";
 	cpuScoreDisplay.innerHTML = cpuScore;
 	playerScoreDisplay.innerHTML = "";
 	playerScoreDisplay.innerHTML = playerScore;
+
+	if (cpuScore >= 11){
+		endGame();
+		youLost.style.display = "";
+	} else if (playerScore >= 11){
+		endGame();
+		youWon.style.display = "";
+	}
 }
 
 //objects instantiated according to the height and width of the page
@@ -162,6 +175,11 @@ var setScores = function(){
   playerScore = 0;
   cpuScoreDisplay = document.getElementById('cpu-score');
   playerScoreDisplay = document.getElementById('player-score')
+  scoreContainer = document.getElementById('score-container');
+  youLost = document.getElementById('you-lost');
+  youWon = document.getElementById('you-won');
+  youLost.style.display = "none";
+  youWon.style.display = "none";
   setScores();
   step()
 }
