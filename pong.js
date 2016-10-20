@@ -47,6 +47,7 @@ function Ball(positionx, positiony){
 	this.speedx = 0;
 	this.speedy = 0;
 	this.radius = 8;
+	this.served = false;
 }
 
 
@@ -71,8 +72,11 @@ Ball.prototype.move = function(){
 }
 
 Ball.prototype.serve = function(){
-	this.speedx = -5
-	this.speedy = Math.random() * (1 + 5) - 1 
+	if(this.served == false){
+		this.speedx = -5
+		this.speedy = Math.random() * (1 + 5) - 1
+		this.served = true; 
+	}
 }
 
 Ball.prototype.reset = function(){
@@ -80,15 +84,39 @@ Ball.prototype.reset = function(){
 	this.speedy = 0;
 	this.positionx = canvasWidth / 2;
 	this.positiony = canvasHeight / 2;
+	this.served = false;
+}
+
+speedupBall = function(speedchange){
+	if(ball.served == true){
+		if (ball.speedx < 0){
+			ball.speedx -= speedchange;
+		} else {
+			ball.speedx += speedchange;
+		}
+
+		if (ball.speedy < 0){
+			ball.speedy -= speedchange;
+		} else {
+			ball.speedy += speedchange;
+		}
+	}
 }
 
 
 var collisionDetection = function(){
-	if (ball.positionx >= (canvasWidth - 17) && playerPaddle.positiony < ball.positiony && ball.positiony < playerPaddle.paddleend){
-		ball.speedx = -ball.speedx;
-		ball.speedy = -ball.speedy;
+	var cpuPaddleSurface = cpuPaddle.positionx + cpuPaddle.width;
+
+	if (ball.positionx >= (canvasWidth - 17) && playerPaddle.positiony < ball.positiony && playerPaddle.positiony + 85 > ball.positiony){
+
+		
+			ball.speedx = -ball.speedx;
+			// ball.speedy = -ball.speedy;
+			console.log(cpuPaddle.positiony, ball.positiony, cpuPaddle.paddleend)
+			console.log(playerPaddle.positiony, ball.positiony, playerPaddle.paddleend)
 		
 	} else if(ball.positionx >= canvasWidth - 17){
+
 		if(playerPaddle.paddleend < ball.positiony || playerPaddle.positiony > ball.positiony){
 			cpuScore++
 			setScores();
@@ -96,26 +124,30 @@ var collisionDetection = function(){
 		}
 	};
 
-	if (ball.positionx <= 17 && cpuPaddle.positiony < ball.positiony && ball.positiony < cpuPaddle.paddleend){
+	if (ball.positionx <= cpuPaddleSurface && cpuPaddle.positiony < ball.positiony && (cpuPaddle.positiony + cpuPaddle.height) > ball.positiony){
 		ball.speedx = -ball.speedx;
-		ball.speedy = -ball.speedy;
-		
-	} else if(ball.positionx <= 17){
+		// ball.speedy = -ball.speedy;
+		console.log(cpuPaddle.positiony, ball.positiony, cpuPaddle.paddleend)
+	} else if 
+	(ball.positionx <= 17){
 
 		if (cpuPaddle.paddleend < ball.positiony || cpuPaddle.positiony > ball.positiony){
-			playerScore++
+			console.log(cpuPaddle.positiony, ball.positiony, cpuPaddle.positiony + cpuPaddle.height)
+			console.log(playerPaddle.positiony, ball.positiony, playerPaddle.paddleend)
+			playerScore++;
 			setScores();
 			ball.reset();
 		}
 	}
 }
 
+
 var computeAi = function(){
 	var midpoint = cpuPaddle.positiony + (cpuPaddle.height / 2)
 	if (ball.positiony <= midpoint){
-		cpuPaddle.positiony = cpuPaddle.positiony -1
+		cpuPaddle.positiony = cpuPaddle.positiony - 3.5
 	} else if(ball.positiony >= midpoint) {
-		cpuPaddle.positiony = cpuPaddle.positiony +1
+		cpuPaddle.positiony = cpuPaddle.positiony + 3.5
 	}
 }
 
@@ -135,6 +167,7 @@ var step = function(){
 	context.clearRect(0, 0, canvasWidth, canvasHeight)
 	render(context)
 	animate(step)
+	speedupBall(.02)
 }
 
 var endGame = function(winner){
@@ -187,6 +220,8 @@ var dmx = function(){
   dmx();
   setScores();
   step();
+  touch = null
+  last = touch
 }
 
 
@@ -203,6 +238,18 @@ window.addEventListener('keydown', function(e){
 		ball.serve()
 	}
 });
+
+window.addEventListener('touchstart', function(e){
+	touch = e.targetTouches[0].screenY 
+	ball.serve()
+});
+
+window.addEventListener('touchmove', function(e){
+	last = touch
+	touch = e.targetTouches[0].screenY
+	move = ((touch - last))
+	playerPaddle.positiony +=  move
+})
 
 
 
